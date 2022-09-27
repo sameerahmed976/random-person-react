@@ -15,12 +15,13 @@ function App() {
   const [title, setTitle] = useState("name");
   const [value, setValue] = useState("random Person");
   const defaultImage = "https://randomuser.me/api/portraits/men/75.jpg";
+
   const fetchData = async () => {
     try {
       setLoading(true);
       const response = await fetch(url);
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
 
       const person = data.results[0];
 
@@ -36,7 +37,7 @@ function App() {
       const { title, first, last } = person.name;
 
       const newPerson = {
-        name: `${title}${first}${last}`,
+        name: `${title} ${first} ${last}`,
         email,
         phone,
         age,
@@ -46,6 +47,10 @@ function App() {
       };
 
       setPerson(newPerson);
+      // console.log(
+      //   "🚀 ~ file: App.jsx ~ line 50 ~ fetchData ~ newPerson",
+      //   newPerson
+      // );
       setTitle("name");
       setValue(newPerson.name);
     } catch (error) {
@@ -61,10 +66,17 @@ function App() {
   const changeText = (e) => {
     if (e.target.classList.contains("icon")) {
       const newValue = e.target.dataset.id;
+      // console.log(
+      //   "🚀 ~ file: App.jsx ~ line 65 ~ changeText ~ newValue",
+      //   newValue
+      // );
+
       setTitle(newValue);
-      setPerson(person[newValue]);
+      setValue(person[newValue]);
     }
   };
+
+  // console.log("🚀 ~ file: App.jsx ~ line 15 ~ App ~ person", person)
 
   return (
     <div className="App">
@@ -72,6 +84,7 @@ function App() {
         <section className="card__image">
           <img src={person?.image || defaultImage} alt="image" />
         </section>
+        <hr />
         <section className="card__content">
           <p className="card__title">my {title} is</p>
           <h2 className="card__heading">{value}</h2>
@@ -88,11 +101,7 @@ function App() {
             <button className="icon" data-id="email" onMouseOver={changeText}>
               <FaEnvelope />
             </button>
-            <button
-              className="icon"
-              data-id="location"
-              onMouseOver={changeText}
-            >
+            <button className="icon" data-id="country" onMouseOver={changeText}>
               <FaMapMarkedAlt />
             </button>
             <button
@@ -103,6 +112,9 @@ function App() {
               <FaLock />
             </button>
           </section>
+          <button className="btn btn--random" onClick={() => fetchData()}>
+            {loading ? "Loading" : "random person"}
+          </button>
         </section>
       </section>
     </div>
